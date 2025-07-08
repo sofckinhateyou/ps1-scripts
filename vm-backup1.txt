@@ -1,0 +1,33 @@
+# Список имен виртуальных машин, которые нужно экспортировать
+$vmNames = "ubuntu-srv"
+
+$date = Get-Date -Format "yyyy/MM/dd"  #renew $date var to make new filename
+$filename1 = "test1.txt"
+#$filename = "$vmName-Export.vhdx"
+
+# Путь для сохранения экспортированных виртуальных машин
+$exportPath = "C:\ExportedVMs\$date"
+
+
+foreach ($vmName in $vmNames) {
+    $vm = Get-VM -Name $vmName
+    if ($vm) {
+        #$exportFilePath = Join-Path -Path $exportPath -ChildPath $filename1
+        #Export-VM -VM $vm -Path $
+        #New-Item -Path $exportPath -ItemType Directory
+        
+        
+        New-Item -Path $exportPath -Name $filename1 -ItemType "file"
+
+
+
+        $date = Get-Date -Format "yyyy/MM/dd HH/mm/ss"
+	    $logMessage = "VM exported at " + $date + " " + $exportPath +"\"+ $filename  #logging
+    	Add-Content -Path "C:\backups\backuping-script\log.txt" -Value $logMessage
+
+    } else {
+        Write-Host "Virtual machine $vmName not found."
+    }
+}
+
+Write-Output $exportPath
