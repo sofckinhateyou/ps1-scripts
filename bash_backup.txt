@@ -1,0 +1,30 @@
+#!/bin/bash
+
+REMOTE_USER="username"
+PASSWORD="pasword"
+REMOTE_HOST="IPADDR"
+REMOTE_PORT="22"  # порт SSH
+
+# Локальная директория для сохранения скопированных файлов
+LOCAL_DIR="/home"
+
+
+
+exportPath=$(sshpass -p $PASSWORD ssh -oStrictHostKeyChecking=no -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "powershell -Command \"& 'C:/backups/test.ps1'\"")
+
+exportPath="C:\ExportedVMs\2024.07.08 test1.txt"
+exportPathWithoutDate=$(echo $exportPath | cut -d' ' -f1)
+echo $exportPathWithoutDate
+
+# Подключение к удаленному серверу и копирование файлов
+sshpass -p $PASSWORD scp -P $REMOTE_PORT -r $REMOTE_USER@$REMOTE_HOST:$exportPathWithoutDate $LOCAL_DIR
+
+echo $exportPath
+
+
+# Проверка статуса выполнения команды scp
+#if [ $? -eq 0 ]; then
+#            echo "Файлы успешно скопированы"
+#    else
+#                echo "Произошла ошибка при копировании файлов"
+#fi
