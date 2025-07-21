@@ -1,7 +1,7 @@
 $mountDir = "D:\mount\win"
 $driverRoot = "D:\iso\virtio-win-0.1.266"
 
-# Получаем все .inf файлы рекурсивно
+# Получаем все .inf
 $infFiles = Get-ChildItem -Path $driverRoot -Recurse -Include *.inf
 
 if ($infFiles.Count -eq 0) {
@@ -15,7 +15,7 @@ foreach ($inf in $infFiles) {
     $driverPath = $inf.DirectoryName
     Write-Host "Добавляю драйвер: $driverPath" -ForegroundColor Green
 
-    # Выполняем DISM
+    # DISM
     $process = Start-Process dism.exe -ArgumentList "/Add-Driver /Image=`"$mountDir`" /Driver=`"$driverPath`"" -Wait -NoNewWindow -PassThru
 
     if ($process.ExitCode -ne 0) {
